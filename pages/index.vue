@@ -68,7 +68,7 @@
 												<tbody>
 													<tr v-for="(amount, symbol) in vault.exposures">
 														<td class="text-right"><Amount :value="amount" /></td>
-														<td class="text-left" style="width:8em">{{ symbol }}</td>
+														<td class="text-left" style="width:8em"><Symbol :value="symbol" /></td>
 													</tr>
 												</tbody>
 											</v-table>
@@ -79,7 +79,7 @@
 												<tbody>
 													<tr v-for="revenue in vault.annualRevenues">
 														<td class="text-right"><Amount :value="revenue.amount / 365" /></td>
-														<td class="text-left" style="width:8em">{{ revenue.symbol }}</td>
+														<td class="text-left" style="width:8em"><Symbol :value="revenue.symbol" /></td>
 													</tr>
 												</tbody>
 											</v-table>
