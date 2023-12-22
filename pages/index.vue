@@ -4,6 +4,10 @@
 			
 			<h1>DeFi Portfolio</h1>
 			
+			<div class="text-center">
+				<p>Updated on: {{ lastUpdate < 0 ? 'loading...' : new Date(lastUpdate).toLocaleString() }}</p>
+			</div>
+			
 			<v-card>
 				<v-tabs v-model="tab">
 					<v-tab value="balance-sheet">Balance Sheet</v-tab>
@@ -148,6 +152,7 @@ export default defineComponent({
 			wallets: {} as any,
 			balanceSheets: {} as { [walletName: string]: BalanceSheet },
 			dailyRevenues: {} as { [walletName: string]: DailyRevenue },
+			lastUpdate: -1,
 		};
 	},
 	mounted() {
@@ -178,6 +183,7 @@ export default defineComponent({
 			}
 		},
 		async refresh() {
+			this.lastUpdate = -1;
 			this.wallets = {};
 			// Fetch data from API.
 			const wallets = {};
@@ -197,6 +203,7 @@ export default defineComponent({
 			}
 			await this.updateBalanceSheets();
 			await this.updateDailyRevenues();
+			this.lastUpdate = Date.now();
 		},
 	},
 });
