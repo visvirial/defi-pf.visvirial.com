@@ -37,7 +37,6 @@ export default defineComponent({
 	props: {
 		positions: Array<Position | undefined>,
 		symbol: String,
-		equity: Number | undefined,
 		dummyCount: Number,
 		equity: (typeof Position) | undefined,
 	},
