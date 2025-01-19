@@ -153,7 +153,7 @@ export class BalanceSheet {
 	}
 	
 	public async updatePrices() {
-		const res = await fetch('https://api.defi-portfolio.visvirial.com/prices?symbols=' + this.symbols.join(','));
+		const res = await fetch('https://api.defi-pf.visvirial.com/prices?symbols=' + this.symbols.join(','));
 		const json = await res.json();
 		for(let i=0; i<json.data.length; i++) {
 			this.setPrice(this.symbols[i], json.data[i]);

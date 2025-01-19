@@ -88,7 +88,7 @@ export class DailyRevenue {
 	public async updatePrices() {
 		const symbols = this.symbols;
 		if(symbols.length === 0) return;
-		const res = await fetch('https://api.defi-portfolio.visvirial.com/prices?symbols=' + symbols.join(','));
+		const res = await fetch('https://api.defi-pf.visvirial.com/prices?symbols=' + symbols.join(','));
 		const json = await res.json();
 		for(let i=0; i<json.data.length; i++) {
 			this.setPrice(symbols[i], json.data[i]);
