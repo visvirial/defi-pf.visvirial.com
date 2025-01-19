@@ -188,13 +188,13 @@ export default defineComponent({
 			// Fetch data from API.
 			const wallets = {};
 			const walletsJSON = parse(this.walletsYAML);
-			await Promise.all(Object.keys(walletsJSON).map(async (walletName) => {
+			for(const walletName of Object.keys(walletsJSON)) {
 				const wallet = walletsJSON[walletName];
 				const query = new URLSearchParams({ wallet: JSON.stringify(wallet) });
 				const res = await fetch('https://api.defi-portfolio.visvirial.com/?' + query.toString());
 				const json = await res.json();
 				wallets[walletName] = json.data;
-			}));
+			}
 			// Add total.
 			const allProtocolResults = [].concat(...Object.values(wallets));
 			this.wallets['Total'] = allProtocolResults;
