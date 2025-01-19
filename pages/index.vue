@@ -89,8 +89,17 @@
 							</div>
 						</v-window-item>
 						<v-window-item value="config">
-							<v-textarea auto-grow v-model="walletsYAML"></v-textarea>
+							<v-text-field label="E-Mail" v-model="email"></v-text-field>
+							<v-text-field
+				 				:append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+								:type="showPassword ? 'text' : 'password'"
+								label="Password"
+								v-model="password"
+								@click:append="showPassword = !showPassword"
+							></v-text-field>
 							<v-btn @click="updateWalletYAML">Apply &amp; Save</v-btn>
+							<hr style="margin: 30px 0px;" />
+							<v-textarea auto-grow readonly v-model="walletsYAML"></v-textarea>
 						</v-window-item>
 					</v-window>
 				</v-card-text>
@@ -147,6 +156,8 @@ export default defineComponent({
 			tab: null,
 			tabBalanceSheet: 'balance-sheet-Total',
 			tabDailyRevenue: 'daily-revenue-Total',
+			email: localStorage.getItem('email') || '',
+			password: localStorage.getItem('password') || '',
 			walletsYAML: '',
 			// wallets[walletName] = ProtcolResult[].
 			wallets: {} as any,
@@ -156,12 +167,22 @@ export default defineComponent({
 		};
 	},
 	mounted() {
-		this.walletsYAML = localStorage.getItem('walletsYAML');
-		this.refresh();
+		this.updateWalletYAML(true);
 	},
 	methods: {
-		updateWalletYAML() {
-			localStorage.setItem('walletsYAML', this.walletsYAML);
+		async updateWalletYAML(omitAltert = false) {
+			// Fetch WalletsYAML.
+			const params = new URLSearchParams({ email: this.email, password: this.password });
+			try {
+				this.walletsYAML = await (await fetch('https://wallets-defi-pf.visvirial.com/get?' + params.toString())).text();
+			} catch(e) {
+				if(!omitAltert) {
+					alert('Failed to fetch Wallets YAML! Check your email and password.');
+				}
+			}
+			// Save email and password.
+			localStorage.setItem('email', this.email);
+			localStorage.setItem('password', this.password);
 			this.refresh();
 		},
 		async updateBalanceSheets() {
