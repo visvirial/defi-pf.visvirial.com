@@ -211,26 +211,27 @@ export default defineComponent({
 			// Fetch data from API.
 			const wallets = {};
 			const walletsJSON = parse(this.walletsYAML);
-			for(const walletName of Object.keys(walletsJSON)) {
+			await Promise.all(Object.keys(walletsJSON).map(async (walletName) => {
 				const wallet = walletsJSON[walletName];
 				const query = new URLSearchParams({ wallet: JSON.stringify(wallet) });
 				const MAX_RETRY = 5;
 				let success = false;
 				for(let i=0; i<MAX_RETRY; i++) {
-					try {
-						const res = await fetch('https://api.defi-pf.visvirial.com/?' + query.toString());
-						const json = await res.json();
-						wallets[walletName] = json.data;
-						success = true;
-						break;
-					} catch(e) {
+					const res = await fetch('https://api.defi-pf.visvirial.com/?' + query.toString());
+					// Retry if failed.
+					if(!res.ok) {
+						continue;
 					}
+					const json = await res.json();
+					wallets[walletName] = json.data;
+					success = true;
+					break;
 				}
 				if(!success) {
 					alert(`Failed to fetch data for ${walletName}!`);
 					return;
 				}
-			}
+			}));
 			// Add total.
 			const allProtocolResults = [].concat(...Object.values(wallets));
 			this.wallets['Total'] = allProtocolResults;
