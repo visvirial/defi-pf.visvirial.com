@@ -156,8 +156,8 @@ export default defineComponent({
 			tab: null,
 			tabBalanceSheet: 'balance-sheet-Total',
 			tabDailyRevenue: 'daily-revenue-Total',
-			email: localStorage.getItem('email') || '',
-			password: localStorage.getItem('password') || '',
+			email: '',
+			password: '',
 			walletsYAML: '',
 			// wallets[walletName] = ProtcolResult[].
 			wallets: {} as any,
@@ -167,6 +167,8 @@ export default defineComponent({
 		};
 	},
 	mounted() {
+		this.email = localStorage.getItem('email') || '';
+		this.password = localStorage.getItem('password') || '';
 		this.updateWalletYAML(true);
 	},
 	methods: {
