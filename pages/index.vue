@@ -212,9 +212,22 @@ export default defineComponent({
 			for(const walletName of Object.keys(walletsJSON)) {
 				const wallet = walletsJSON[walletName];
 				const query = new URLSearchParams({ wallet: JSON.stringify(wallet) });
-				const res = await fetch('https://api.defi-pf.visvirial.com/?' + query.toString());
-				const json = await res.json();
-				wallets[walletName] = json.data;
+				const MAX_RETRY = 5;
+				let success = false;
+				for(let i=0; i<MAX_RETRY; i++) {
+					try {
+						const res = await fetch('https://api.defi-pf.visvirial.com/?' + query.toString());
+						const json = await res.json();
+						wallets[walletName] = json.data;
+						success = true;
+						break;
+					} catch(e) {
+					}
+				}
+				if(!success) {
+					alert(`Failed to fetch data for ${walletName}!`);
+					return;
+				}
 			}
 			// Add total.
 			const allProtocolResults = [].concat(...Object.values(wallets));
