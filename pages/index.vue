@@ -191,7 +191,7 @@ export default defineComponent({
 			for(const walletName of Object.keys(walletsJSON)) {
 				const wallet = walletsJSON[walletName];
 				const query = new URLSearchParams({ wallet: JSON.stringify(wallet) });
-				const res = await fetch('https://api.defi-portfolio.visvirial.com/?' + query.toString());
+				const res = await fetch('https://api.defi-pf.visvirial.com/?' + query.toString());
 				const json = await res.json();
 				wallets[walletName] = json.data;
 			}
